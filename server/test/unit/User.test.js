@@ -47,3 +47,15 @@ describe('User Controller Create', () => {
     expect(next).toBeCalledWith(errorMessage);
   });
 });
+
+describe('User Controller Get', () => {
+  it('should have a getUser function', () => {
+    expect(typeof userController.getUser).toBe('function');
+  });
+
+  // it('should call userModel.findOne({ email: "" })', async () => {
+  //   await userController.getUser(req, res, next);
+  // });
+
+  // it('should', async () => {});
+});

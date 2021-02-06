@@ -7,7 +7,7 @@ it('POST /cbm/recipe/upload', async () => {
     .post('/cbm/recipe/upload')
     .send(newRecipe);
 
-  expect(response.statusCode).toBe(200);
+  expect(response.statusCode).toBe(201);
   expect(response.body.title).toBe(newRecipe.title);
   expect(response.body.content).toBe(newRecipe.content);
   expect(response.body.category).toBe(newRecipe.category);
@@ -20,4 +20,14 @@ it('should return 500 on POST /cbm/recipe/upload', async () => {
 
   expect(response.statusCode).toBe(500);
   expect(response.body).toStrictEqual({ message: response.body.message });
+});
+
+it('GET /cbm/recipe/recipe', async () => {
+  const response = await request(app)
+    .get('/cbm/recipe/recipe');
+
+  expect(response.statusCode).toBe(200);
+  expect(Array.isArray(response.body)).toBeTruthy();
+  expect(response.body[0].title).toBeDefined();
+  expect(response.body[0].content).toBeDefined();
 });

@@ -8,3 +8,11 @@ exports.createUser = async (req, res, next) => {
     next(error);
   }
 }
+
+exports.getUser = async (req, res, next) => {
+  try {
+    await User.findOne({ email: '' });
+  } catch (error) {
+    next(error);
+  }
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "title" : "제목1",
+    "content": "내용1",
+    "category": 1,
+    "images": [],
+    "views": 0
+  },
+  {
+    "title" : "제목2",
+    "content": "내용2",
+    "category": 1,
+    "images": [],
+    "views": 0
+  },
+  {
+    "title" : "제목3",
+    "content": "내용3",
+    "category": 1,
+    "images": [],
+    "views": 0
+  }
+]
