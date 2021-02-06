@@ -1,3 +1,6 @@
-exports.test = (req, res) => {
-  res.send('안녕하세요, 반갑습니다.');
+const recipeModel = require('../models/Recipe');
+
+exports.createRecipe = (req, res, next) => {
+  const createdRecipe = recipeModel.create(req.body);
+  res.status(201).json(createdRecipe);
 }

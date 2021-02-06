@@ -1,9 +1,20 @@
 const express = require('express');
 const app = express();
 
+require('dotenv').config();
 const mongoose = require('mongoose');
 
 app.use(express.json());
+
+mongoose
+  .connect(process.env.mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: true,
+  })
+  .then(() => console.log('MongoDB is connected...'))
+  .catch(error => console.error('MongoDB connecting ERROR: ', error));
 
 app.get('/', (req, res) => {
   res.send('Hello, world');
