@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controller/user');
 
 // ------------------------
 //          User
 // ------------------------
 
-router.get('/test', (req, res) => {
-  res.send('안녕하세요');
-});
+router.post('/signup', userController.createUser);
 
 module.exports = router;

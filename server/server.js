@@ -22,8 +22,14 @@ app.get('/', (req, res) => {
 
 app.use('/cbm/user', require('./routes/user'));
 app.use('/cbm/recipe', require('./routes/recipe'));
+// error handler function
+app.use((error, req, res, next) => {
+  res.status(500).json({ message: error.message });
+});
 
 const PORT = 5000;
 
-app.listen(PORT);
-console.log(`CBM is running on http://localhost:${PORT}`);
+// app.listen(PORT);
+// console.log(`CBM is running on http://localhost:${PORT}`);
+
+module.exports = app;

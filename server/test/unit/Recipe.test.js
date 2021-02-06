@@ -10,7 +10,7 @@ let req, res, next;
 beforeEach(() => {
   req = httpMocks.createRequest();
   res = httpMocks.createResponse();
-  next = null;
+  next = jest.fn();
 });
 
 describe('Recipe Controller Create', () => {
@@ -22,21 +22,28 @@ describe('Recipe Controller Create', () => {
     expect(typeof recipeController.createRecipe).toBe('function');
   });
 
-  it('should call RecipeModel.create', () => {
-
-    recipeController.createRecipe(req, res, next);
+  it('should call RecipeModel.create', async () => {
+    await recipeController.createRecipe(req, res, next);
     expect(recipeModel.create).toBeCalledWith(newRecipe);
   });
 
-  it('should return 201 response code', () => {
-    recipeController.createRecipe(req, res, next);
-    expect(res.statusCode).toBe(201);
+  it('should return 200 response code', async () => {
+    await recipeController.createRecipe(req, res, next);
+    expect(res.statusCode).toBe(200);
     expect(res._isEndCalled()).toBeTruthy();
   });
 
-  it('should return json body in response', () => {
+  it('should return json body in response', async () => {
     recipeModel.create.mockReturnValue(newRecipe);
-    recipeController.createRecipe(req, res, next);
+    await recipeController.createRecipe(req, res, next);
     expect(res._getJSONData()).toStrictEqual(newRecipe);
+  });
+
+  it('should handle errors', async () => {
+    const errorMessage = { message: 'description property missing' };
+    const rejectedPromise = Promise.reject(errorMessage);
+    recipeModel.create.mockReturnValue(rejectedPromise);
+    await recipeController.createRecipe(req, res, next);
+    expect(next).toBeCalledWith(errorMessage);
   });
 });

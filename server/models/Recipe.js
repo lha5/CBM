@@ -7,10 +7,12 @@ const recipeSchema = new mongoose.Schema({
 //   },
   title : {
       type: String,
-      maxLength: 100
+      maxLength: 100,
+      required: true
   },
   content : {
-      type: String
+      type: String,
+      required: true
   },
   category: {
       type: Number
@@ -27,4 +29,4 @@ const recipeSchema = new mongoose.Schema({
 
 const Recipe = mongoose.model('Recipe', recipeSchema);
 
-module.exports = { Recipe };
+module.exports = Recipe;

@@ -1,0 +1,10 @@
+{
+  "name": "테스트",
+  "email": "test@test.com",
+  "password": "",
+  "provider": 0,
+  "role": 1,
+  "image": "image.png",
+  "token": "abc123",
+  "tokenExp": 12345
+}
