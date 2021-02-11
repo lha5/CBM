@@ -8,8 +8,11 @@ const Recipe = require('../../models/Recipe');
 recipeModel.create = jest.fn();
 recipeModel.find = jest.fn();
 recipeModel.findById = jest.fn();
+recipeModel.findByIdAndUpdate = jest.fn();
+recipeModel.findByIdAndDelete = jest.fn();
 
 const recipeId = '601ea1fee0fe3a0a5c02216f';
+const updatedRecipe = { title: '제목 수정1', content: '내용 수정 1' };
 
 let req, res, next;
 
@@ -116,6 +119,87 @@ describe('Recipe Controller GetById', () => {
     const rejectedPromise = Promise.reject(errorMessage);
     recipeModel.findById.mockReturnValue(rejectedPromise);
     await recipeController.getRecipeById(req, res, next);
+    expect(next).toHaveBeenCalledWith(errorMessage);
+  });
+});
+
+describe('Recipe Controller Update', () => {
+  it('should have an updateRecipe function', () => {
+    expect(typeof recipeController.updateRecipe).toBe('function');
+  });
+
+  it('should call recipeModel.findByIdAndUpdate', async () => {
+    req.params.recipeId = recipeId;
+    req.body = updatedRecipe;
+    await recipeController.updateRecipe(req, res, next);
+    expect(recipeModel.findByIdAndUpdate).toHaveBeenCalledWith(
+      recipeId,
+      updatedRecipe,
+      { updated: true }
+    );
+  });
+
+  it('should return JSON body and resonse code 200', async () => {
+    req.params.recipeId = recipeId;
+    req.body = updatedRecipe;
+    recipeModel.findByIdAndUpdate.mockReturnValue(updatedRecipe);
+    await recipeController.updateRecipe(req, res, next);
+    expect(res._isEndCalled()).toBeTruthy();
+    expect(res.statusCode).toBe(200);
+    expect(res._getJSONData()).toStrictEqual(updatedRecipe);
+  });
+
+  it('should handle 404 when item does not exits', async () => {
+    recipeModel.findByIdAndUpdate.mockReturnValue(null);
+    await recipeController.updateRecipe(req, res, next);
+    expect(res.statusCode).toBe(404);
+    expect(res._isEndCalled()).toBeTruthy();
+  });
+
+  it('should handle errors', async () => {
+    const errorMessage = { message: 'error occured '};
+    const rejectedPromise = Promise.reject(errorMessage);
+    recipeModel.findByIdAndUpdate.mockReturnValue(rejectedPromise);
+    await recipeController.updateRecipe(req, res, next);
+    expect(next).toHaveBeenCalledWith(errorMessage);
+  });
+});
+
+describe('Recipe Controller Delete', () => {
+  it('should have a deleteRecipe function', () => {
+    expect(typeof recipeController.deleteRecipe).toBe('function');
+  });
+
+  it('should call RecipeModel.findByIdAndDelete', async () => {
+    req.params.recipeId = recipeId;
+    await recipeController.deleteRecipe(req, res, next);
+    expect(recipeModel.findByIdAndDelete).toBeCalledWith(recipeId);
+  });
+
+  it('should return response code 200', async () => {
+    let deletedRecipe = {
+      title: 'deleted recipe title',
+      content: 'deleted recipe content'
+    };
+    recipeModel.findByIdAndDelete.mockReturnValue(deletedRecipe);
+    await recipeController.deleteRecipe(req, res, next);
+    expect(res.statusCode).toBe(200);
+    expect(res._getJSONData()).toStrictEqual(deletedRecipe);
+    expect(res._isEndCalled()).toBeTruthy();
+  });
+
+  it('should handle 404 when item does not exist', async () => {
+    recipeModel.findByIdAndDelete.mockReturnValue(null);
+    await recipeController.deleteRecipe(req, res, next);
+    expect(res.statusCode).toBe(404);
+    expect(res._isEndCalled()).toBeTruthy();
+  });
+
+  it('should handle errors', async () => {
+    const errorMessage = { message: 'error occured deleting'};
+    const rejectedPromise = Promise.reject(errorMessage);
+    recipeModel.findByIdAndDelete.mockReturnValue(rejectedPromise);
+    await recipeController.deleteRecipe(req, res, next);
     expect(next).toHaveBeenCalledWith(errorMessage);
   });
 });
