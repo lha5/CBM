@@ -22,9 +22,9 @@ it('should return 500 on POST /cbm/recipe/upload', async () => {
   expect(response.body).toStrictEqual({ message: response.body.message });
 });
 
-it('GET /cbm/recipe/recipe', async () => {
+it('GET /cbm/recipe/recipes', async () => {
   const response = await request(app)
-    .get('/cbm/recipe/recipe');
+    .get('/cbm/recipe/recipes');
 
   expect(response.statusCode).toBe(200);
   expect(Array.isArray(response.body)).toBeTruthy();

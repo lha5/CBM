@@ -8,6 +8,8 @@ const recipeController = require('../controller/recipe');
 
 router.post('/upload', recipeController.createRecipe);
 
-router.get('/recipe', recipeController.getRecipes);
+router.get('/recipes', recipeController.getRecipes);
+
+router.get('/recipe', recipeController.getRecipeById);
 
 module.exports = router;
